@@ -218,7 +218,7 @@
                             var a = snapshot.val();
                             if (a == null) { //upload,download,success,error
                                 ShowSomething(document.getElementById("logincomponents"));
-                                document.getElementById('message_mobile').innerHTML = "Allocate+ only allows downloading timetable on desktop devices. <br> Use a computer to upload your timetable.";
+                                document.getElementById('message_mobile').innerHTML = "Recommened to use a computer to upload your timetable.";
                                 $("#message_mobile").toggleClass('orange-text');
                                 drawoncalendar(null, "my");
                             } else if (a != null && a.indexOf("ERR") != -1) {
@@ -882,7 +882,7 @@
 
 <header>
 
-    <nav class="indigo darken-4">
+    <nav class="indigo darken-2">
 
         <ul id="slide-out" class="grey lighten-3 side-nav fixed">
             <li>
@@ -1221,21 +1221,30 @@
                 <div id="dropZone" style="padding-bottom: 150px; border: solid 2px black" class="center col l12 s12 ">
                     <ol style="text-align: left">
                         <li>
-                            <p>Login in to Allocate+ and select the timetable tab.</p>
+                            <p>Login in to QUT Virtual and select the calendar logo in top left corner.</p>
                         </li>
                         <li>
-                            <p>Download the timetable text file (Make sure you select all weeks!)</p>
+                            <p>Click on "Export Calendar" and select the date range of the current semester.</p>
                         </li>
                         <li>
                             <p>Upload the file and you're on your way!</p>
                         </li>
+                        <li>
+                            <p class="orange-text">If you cannot download on Chrome, use Microsoft Edge.</p>
+                        </li>
                     </ol>
-                    <img class="materialboxed" width="100%" src="allocatehelp.png">
 
-                    <br><br><br><br><br>
+                    <br><br><br>
                     <input id="fileInput" class="center" size="60" style="opacity: 0.4;" type="file">
-                    <br><br><br><br>
+                    <br><br>
                     <p><strong>Or drag and drop betweeen the black border</strong></p>
+
+                    <br><br>
+                    <img class="materialboxed" width="100%" src="../img/1.png">
+                    <img class="materialboxed" width="100%" src="../img/2.png">
+                    <img class="materialboxed" width="100%" src="../img/3.png">
+
+
 
                 </div>
 
@@ -1334,7 +1343,7 @@
             <li><a onclick="window.print()" class="btn-floating green"><i class="material-icons">print</i></a></li>
             <li><a onclick="calcd('download')" class="btn-floating orange"><i
                     class="material-icons">file_download</i></a></li>
-            <li><a onclick="calcd('link')" class="btn-floating indigo darken-4"><i class="material-icons">link</i></a></li>
+            <li><a onclick="calcd('link')" class="btn-floating indigo darken-2"><i class="material-icons">link</i></a></li>
         </ul>
     </div>
 </main>
