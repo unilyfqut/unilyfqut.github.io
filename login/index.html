@@ -493,6 +493,15 @@
             return Math.floor(Math.random() * (max - min + 1)) + min;
         }
 
+        function elementinLinear(l, e){
+
+            for(var i =0; i < l.length; i++){
+                if(e==l[i])
+                    return true
+            }
+            return false;
+        }
+
         function createEventCalendarWithTime(color, start, e, title, duration, data) {
             try {
                 newEvent = {};
@@ -501,10 +510,14 @@
                 if (e == "---") {
                     newEvent.title = title;
                     newEvent.description = "";
-                } else {
+                } else if(e!="---" && (elementinLinear(timetablesur, ""+data.trim()))) {
+                    newEvent.title = title;
+                    newEvent.description = "";
+                }else{
                     newEvent.title = "";
                     newEvent.description = "";
                 }
+
                 newEvent.start = new Date(new Date(start).getTime() + (5 * 60000));
 
                 duration = duration.replace("~", ".");
