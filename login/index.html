@@ -711,9 +711,11 @@
                 firebase.database().ref('users/' + uid + "/viewLimit").set(""+3);
                 console.log("Setting initial counter...");
                 $("#viewcounter").html("3");
-            }else{
+            }else if(va!='inf'){
                 console.log("Fetched intial counter..");
                 $("#viewcounter").html(va);
+            }else{
+                $("#limiter").css('display','none');
             }
 
         });}catch(err){
@@ -1195,6 +1197,9 @@
                         function upload(file) {
                             //TODO upload progress bar
                             if (file.size < 2000000) {
+
+                                $("#dropZone").css('border', 'solid 10px green');
+
                                 var storageRef = firebase.storage().ref();
                                 var mountainImagesRef = storageRef.child('usertimetable/' + uid);
                                 task = mountainImagesRef.put(file);
