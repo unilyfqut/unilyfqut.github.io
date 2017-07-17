@@ -281,29 +281,54 @@
             //TODO store the facebook friend -> uid locally.
             if(locallstoredsessionclasses[fuid]==null) {
 //                ////console.log("Friend class not local");
-                var starCountRef = firebase.database().ref('facebook_to_id/' + fuid);
-                starCountRef.once('value').then(function (snapshot) {
-                    var uid_fb_friend = snapshot.val();
-                    if (uid_fb_friend != null) {
-                        var starCountRef = firebase.database().ref('users/' + uid_fb_friend + '/classes/');
+
+                var starf = firebase.database().ref('/users/' + uid + "/viewLimit");
+                starf.once('value').then(function (snapshot) {
+                    var va = snapshot.val();
+                    console.log(va);
+                    if(va!=null && (va=='inf' || va>0)) {
+
+                        var starCountRef = firebase.database().ref('facebook_to_id/' + fuid);
                         starCountRef.once('value').then(function (snapshot) {
-                            var friend_tt = snapshot.val();
-                            friend_tt = convertToList(friend_tt);
-                            locallstoredsessionclasses[fuid] = friend_tt;
-                            if (friend_tt != null || friend_tt.length <= 0) {
-                                //////console.log("/users/" + uid_fb_friend + "/viewedby/" + uid);
-                                firebase.database().ref("/users/" + uid_fb_friend + "/viewedby/" + uid).set({time: new Date().toString()});
-                                drawoncalendar(friend_tt, fuid);
+                            var uid_fb_friend = snapshot.val();
+                            if (uid_fb_friend != null) {
+                                var starCountRef = firebase.database().ref('users/' + uid_fb_friend + '/classes/');
+                                starCountRef.once('value').then(function (snapshot) {
+                                    var friend_tt = snapshot.val();
+                                    friend_tt = convertToList(friend_tt);
+                                    locallstoredsessionclasses[fuid] = friend_tt;
+                                    if (friend_tt != null || friend_tt.length <= 0) {
+                                        //////console.log("/users/" + uid_fb_friend + "/viewedby/" + uid);
+                                        firebase.database().ref("/users/" + uid_fb_friend + "/viewedby/" + uid).set({time: new Date().toString()});
+
+                                        //timetogetthevalue and subtract it and update it..
+                                        //COMBACKHERE
+                                        $("#viewcounter").html(va - 1);
+                                        if(va!='inf')
+                                            firebase.database().ref('/users/' + uid + "/viewLimit").set(va - 1);
+
+
+                                        drawoncalendar(friend_tt, fuid);
+                                    } else {
+                                        alert("Friend hasn't uploaded timetable. ");
+                                    }
+                                    toggleload();
+                                });
                             } else {
-                                alert("Friend hasn't uploaded timetable. ");
+                                alert("Facebook friend not in database yet...");
+                                toggleload();
                             }
-                            toggleload();
                         });
-                    } else {
-                        alert("Facebook friend not in database yet...");
+
+
+                    }else if(va!=null && va<=0){
+                        alert("Invite more friends to use Unilyf QUT..");
                         toggleload();
                     }
+
                 });
+
+
             }else{
 //                ////console.log("local");
                 var l = locallstoredsessionclasses[fuid];
@@ -675,6 +700,7 @@
     function showViewCount() {
         try{
         console.log("into showviewcount");
+            $("#limiter").css('display','block');
         $("#viewcounter").html("Loading...");
 
         var starf = firebase.database().ref('/users/' + uid + "/viewLimit");
@@ -736,6 +762,8 @@
                 console.log("response length is"+response.length);
                 if(response.length < 4){
                     showViewCount();
+                }else{
+                    firebase.database().ref('users/' + uid + "/viewLimit").set("inf");
                 }
 
                 for (i = 0; i < response.length; i++) {
@@ -1311,7 +1339,7 @@
                 </div>
                 <div class="col s12">
 
-                    <div class="col s12">
+                    <div id="limiter" style="display: none;" class="col s12">
                         <h4>Views remaining</h4>
                         <h5 id="viewcounter">3</h5>
                         <!--You only get to see friend's timetable three times until you've got atleast four friends who use this website. If you don't have atleast four friends who use Unilyf QUT, we suggest you invite them to use it.-->
